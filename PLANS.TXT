@@ -1,0 +1,39 @@
+COMMAND IDEAS
+
+
+!javadoc (no args)
+Provides random JavaDoc from random Java version
+
+!javadoc <#>
+Provides random JavaDoc for version specified by #
+
+!javadoc <$>
+Provides specified Javadoc if exists from latest version of Java
+
+!javadoc <$> <#>
+Provides specified Javadoc if exists from latest version of Java
+
+
+
+
+Workflow
+
+Retrieve message from channel ->
+Parse message to determine if message is command ->
+if no, break;
+ else ->
+ determine command type
+ build command parameters based on type
+ build command object based on params
+ process command object to build Collection<Message> object
+ send message object to server
+
+
+Considerations:
+
+Message max length = ??? for the sake of segmentation
+Suppress sending if user is typing to avoid discontinuity
+Configuration for spam, we want spammable, but also non-spammable option
+Eventual deployment
+CronJob status
+
