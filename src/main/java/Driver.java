@@ -5,29 +5,29 @@ import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
+import discord4j.core.object.entity.channel.MessageChannel;
+import discord4j.core.spec.MessageCreateMono;
+import discord4j.core.spec.TextChannelCreateMono;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Driver {
+
+    static ArrayList<String> messageStuff = JavaDocParser.getJavaDocOfTheDayPost("");
+    static AtomicInteger index = new AtomicInteger();
     public static void main(String[] args) {
-        DiscordClient client = DiscordClient.create(loadToken());
-        Mono<Void> login = client.withGateway((GatewayDiscordClient gateway) -> {
-            // ReadyEvent example
-            Mono<Void> printOnLogin = gateway.on(ReadyEvent.class, event ->      Mono.fromRunnable(() -> {        final User self = event.getSelf();        System.out.printf("Logged in as %s#%s%n", self.getUsername(), self.getDiscriminator());      }))      .then();
-            // MessageCreateEvent example
-            Mono<Void> handlePingCommand = gateway.on(MessageCreateEvent.class, event -> {    Message message = event.getMessage();
-            if (message.getContent().equalsIgnoreCase("!ping")) {
-                return message.getChannel().flatMap(channel -> channel.createMessage(JavaDocParser.getJavaDocOfTheDayPost("")));
-            }
-            return Mono.empty();
-        }).then();
-        return printOnLogin.and(handlePingCommand);});
-        login.block();
+
+
+
+    Bot.Bot.start();
 
     }
+
 
 
     private static String loadToken() {

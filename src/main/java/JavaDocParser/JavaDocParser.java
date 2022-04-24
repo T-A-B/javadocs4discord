@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class JavaDocParser {
-    public static String getJavaDocOfTheDayPost(String p_filename){
+    public static ArrayList<String> getJavaDocOfTheDayPost(String p_filename){
         ArrayList<String> lines = null;
-        File f = new File("DOCS/JDK8/docs/api/java/io/BufferedOutputStream.html");
+        File f = new File("DOCS/JDK8/docs/api/java/util/concurrent/ConcurrentHashMap.html");
         try {
          lines = (ArrayList<String>) Files.readAllLines(f.toPath());
         } catch (IOException e) {
@@ -31,7 +31,7 @@ public class JavaDocParser {
                 break;
             };
             if(startRecording){
-                linesWeCareAbout.add(s.replaceAll("<[^>]*>", ""));
+                linesWeCareAbout.add(s.replaceAll("<[^>]*>", "").replaceAll("&.*;", "") + "\n");
             }
         }
 
@@ -41,7 +41,40 @@ public class JavaDocParser {
             sbOutString.append(s).append("\n");
         }
 
-        return sbOutString.toString();
+        String totalString = sbOutString.toString();
+
+        ArrayList<String> outList = new ArrayList<>();
+        ArrayList<String> parallelList = new ArrayList<>();
+        StringBuilder sbLocal = new StringBuilder();
+        if (totalString.length() < 2000) {
+            outList.add(totalString);
+            return outList;
+        }
+        else {
+            int localSum = 0;
+
+
+
+            parallelList.addAll(linesWeCareAbout);
+
+            for(String s : linesWeCareAbout){
+                localSum += s.length();
+                if (localSum < 1996) {
+                    sbLocal.append(s);
+                }
+                else {
+                    localSum = 0;
+                    outList.add(sbLocal.append("```").toString());
+                    sbLocal = new StringBuilder().append("```");
+                ;
+                }
+                parallelList.remove(s);
+            }
+        }
+
+        if (sbLocal.toString() != "")
+        outList.add(sbLocal.toString());
+        return outList;
     }
 
     public static void main(String[] args){
