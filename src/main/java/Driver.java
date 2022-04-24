@@ -1,3 +1,4 @@
+import JavaDocParser.JavaDocParser;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
@@ -19,7 +20,7 @@ public class Driver {
             // MessageCreateEvent example
             Mono<Void> handlePingCommand = gateway.on(MessageCreateEvent.class, event -> {    Message message = event.getMessage();
             if (message.getContent().equalsIgnoreCase("!ping")) {
-                return message.getChannel().flatMap(channel -> channel.createMessage("pong!"));
+                return message.getChannel().flatMap(channel -> channel.createMessage(JavaDocParser.getJavaDocOfTheDayPost("")));
             }
             return Mono.empty();
         }).then();
