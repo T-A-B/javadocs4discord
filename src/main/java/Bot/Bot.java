@@ -19,10 +19,11 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Bot {
-    static ArrayList<String> messageStuff = JavaDocParser.getJavaDocOfTheDayPost("");
+    ArrayList<String> messageStuff;
     static AtomicInteger index = new AtomicInteger();
 
-    public static void start() {
+    public  void start() {
+        messageStuff = JavaDocParser.getJavaDocOfTheDayPost();
         DiscordClient client = DiscordClient.create(loadToken());
         Mono<Void> login = client.withGateway((GatewayDiscordClient gateway) -> {
             // ReadyEvent example
@@ -33,17 +34,25 @@ public class Bot {
             // MessageCreateEvent example
             Mono<Void> handlePingCommand = gateway.on(MessageCreateEvent.class, event -> {
                 Message message = event.getMessage();
-                if (message.getContent().equalsIgnoreCase("!ping")) {
-                    return message.getChannel().flatMap(channel ->
-                            //Resolve hack
-                            channel.createMessage(messageStuff.get(index.getAndIncrement()))
-                                    .then(index.get() <= messageStuff.size() - 1 ?  channel.createMessage(messageStuff.get(index.getAndIncrement()))  : Mono.empty()).log()
-                                    .then(index.get() <= messageStuff.size() - 1 ?  channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1))  : Mono.empty()).log()
-                                    .then(index.get() <= messageStuff.size() - 1 ?  channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1))  : Mono.empty()).log()
-                                    .then(index.get() <= messageStuff.size() - 1 ?  channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1))  : Mono.empty()).log()
-                                    .then(index.get() <= messageStuff.size() - 1 ?  channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1))  : Mono.empty()).log()
-                                    .then(index.get() <= messageStuff.size() - 1 ?  channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1))  : Mono.empty()).log()
-                            );
+                if (message.getContent().equalsIgnoreCase("!javadoc")) {
+                    return message.getChannel().flatMap(channel -> {
+                        //Resolve hack
+                        messageStuff = JavaDocParser.getJavaDocOfTheDayPost();
+                      return   channel.createMessage(messageStuff.get(index.getAndIncrement()))
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                               //Hackfurther
+                                .then(index.getAndSet(0) <= messageStuff.size() - 100 ? channel.createMessage(messageStuff.get(index.get())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log();
+
+                    });
                 }
                 return Mono.empty();
             }).then();
@@ -52,10 +61,7 @@ public class Bot {
         login.block();
     }
 
-    private static Mono<Void> messagePrinting(MessageChannel p_channel) {
-        return p_channel.createMessage(messageStuff.get(index.getAndIncrement())).then(messagePrinting(p_channel));
 
-    }
 
     private static String loadToken() {
         File f = new File("token.dat");

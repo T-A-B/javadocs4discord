@@ -1,3 +1,4 @@
+import Bot.Bot;
 import JavaDocParser.JavaDocParser;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
@@ -18,13 +19,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Driver {
 
-    static ArrayList<String> messageStuff = JavaDocParser.getJavaDocOfTheDayPost("");
+    static ArrayList<String> messageStuff = JavaDocParser.getJavaDocOfTheDayPost();
     static AtomicInteger index = new AtomicInteger();
     public static void main(String[] args) {
 
 
-
-    Bot.Bot.start();
+        Bot b = new Bot();
+        b.start();
 
     }
 

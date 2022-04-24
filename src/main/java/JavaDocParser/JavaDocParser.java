@@ -1,17 +1,54 @@
 package JavaDocParser;
 
+import jdk.jfr.internal.Logger;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
+import javax.sound.midi.Soundbank;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class JavaDocParser {
-    public static ArrayList<String> getJavaDocOfTheDayPost(String p_filename){
+    static HashMap<Integer, String> javadocRandomizerMap = new HashMap<>();
+    static {
+        populateMap();
+
+    }
+    public static void populateMap(){
+        File dir = new File("DOCS/JDK8/docs/api/java");
+        Collection<File> files = FileUtils.listFiles(
+                dir,
+                new RegexFileFilter("^((?!\\-).)*$"),
+                DirectoryFileFilter.DIRECTORY
+        );
+        int x = 0;
+        for(File f : files ) {
+            System.out.println(f.getPath());
+
+            if(f.getPath().contains(".html") && !f.getPath().contains("-")) {
+                javadocRandomizerMap.put(x, f.getPath());
+                x++;
+            }
+
+        }
+        System.out.println("hello");;
+    }
+    public static int getRandom(){
+
+        Random r = new Random(System.currentTimeMillis());
+        return  r.nextInt(javadocRandomizerMap.size());
+
+    }
+
+    public static ArrayList<String> getJavaDocOfTheDayPost(){
+        String fileName = javadocRandomizerMap.get(getRandom());
+        System.out.println("FILENAME: " + fileName);
         ArrayList<String> lines = null;
-        File f = new File("DOCS/JDK8/docs/api/java/util/concurrent/ConcurrentHashMap.html");
+        File f = new File(fileName);
         try {
          lines = (ArrayList<String>) Files.readAllLines(f.toPath());
         } catch (IOException e) {
@@ -20,6 +57,8 @@ public class JavaDocParser {
 
         boolean startRecording = false;
         ArrayList<String> linesWeCareAbout = new ArrayList<>();
+        linesWeCareAbout.add("https://docs.oracle.com/javase/8/" + fileName.replace("DOCS\\JDK8\\", "").replace("\\", "/"));
+        System.out.println("####" + fileName.replace("DOCS\\JDK8\\", ""));
         linesWeCareAbout.add("```");
         for(String s : lines) {
             if(s.equals("<!-- ======== START OF CLASS DATA ======== -->")){
@@ -78,6 +117,6 @@ public class JavaDocParser {
     }
 
     public static void main(String[] args){
-        System.out.println(getJavaDocOfTheDayPost(""));
+        System.out.println(getJavaDocOfTheDayPost());
     }
 }
