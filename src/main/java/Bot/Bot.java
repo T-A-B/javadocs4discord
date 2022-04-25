@@ -38,17 +38,17 @@ public class Bot {
                     return message.getChannel().flatMap(channel -> {
                         //Resolve hack
                         messageStuff = JavaDocParser.getJavaDocOfTheDayPost();
-                      return   channel.createMessage(messageStuff.get(index.getAndIncrement()))
-                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())) : Mono.empty()).log()
-                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
-                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
-                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
-                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
-                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
-                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
-                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
-                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
-                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                      return   channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" ))
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                              .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
                                //Hackfurther
                                 .then(index.getAndSet(0) <= messageStuff.size() - 100 ? channel.createMessage(messageStuff.get(index.get())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log();
 

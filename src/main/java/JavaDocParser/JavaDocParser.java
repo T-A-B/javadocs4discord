@@ -57,9 +57,10 @@ public class JavaDocParser {
 
         boolean startRecording = false;
         ArrayList<String> linesWeCareAbout = new ArrayList<>();
-        linesWeCareAbout.add("https://docs.oracle.com/javase/8/" + fileName.replace("DOCS\\JDK8\\", "").replace("\\", "/"));
+      //  linesWeCareAbout.add("https://docs.oracle.com/javase/8/" + fileName.replace("DOCS\\JDK8\\", "").replace("\\", "/"));
+
         System.out.println("####" + fileName.replace("DOCS\\JDK8\\", ""));
-        linesWeCareAbout.add("```");
+
         for(String s : lines) {
             if(s.equals("<!-- ======== START OF CLASS DATA ======== -->")){
                 startRecording = true;
@@ -74,17 +75,17 @@ public class JavaDocParser {
             }
         }
 
-        linesWeCareAbout.add("```");
-        StringBuilder sbOutString = new StringBuilder();
+    //    linesWeCareAbout.add("```");
+        StringBuilder sbOutString = new StringBuilder().append("https://docs.oracle.com/javase/8/" + fileName.replace("DOCS\\JDK8\\", "").replace("\\", "/")).append("\n```");
         for(String s: linesWeCareAbout){
             sbOutString.append(s).append("\n");
         }
-
-        String totalString = sbOutString.toString();
+   //     linesWeCareAbout.add("```");
+        String totalString = sbOutString.append("```").toString().replace("\n\n\n", "\n\n");
 
         ArrayList<String> outList = new ArrayList<>();
         ArrayList<String> parallelList = new ArrayList<>();
-        StringBuilder sbLocal = new StringBuilder();
+        StringBuilder sbLocal = new StringBuilder().append("https://docs.oracle.com/javase/8/" + fileName.replace("DOCS\\JDK8\\", "").replace("\\", "/")).append("```");
         if (totalString.length() < 2000) {
             outList.add(totalString);
             return outList;
@@ -111,8 +112,8 @@ public class JavaDocParser {
             }
         }
 
-        if (sbLocal.toString() != "")
-        outList.add(sbLocal.toString());
+        if (!sbLocal.toString().equals( ""))
+        outList.add(sbLocal.append("```").toString().replace("```\n```", "\n```"));
         return outList;
     }
 
