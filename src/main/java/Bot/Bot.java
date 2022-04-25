@@ -54,6 +54,39 @@ public class Bot {
 
                     });
                 }
+                else if(message.getContent().startsWith("!javadoc")){
+                String[] tokens = message.getContent().split(" ");
+                if (tokens.length != 2){
+                    System.out.println("Wrong args supplied");
+                    return message.getChannel().flatMap(channel -> {
+                        //Resolve hack
+                        messageStuff = JavaDocParser.getJavaDocOfTheDayPost();
+                        return   channel.createMessage("Wrong number of arguments supplied.\nUse:\n ```!javadoc ClassName```");
+
+                    });
+                }else{
+                    return message.getChannel().flatMap(channel -> {
+                        //Resolve hack
+                        messageStuff = JavaDocParser.getSpecificJavaDocPost(tokens[1]);
+                        return   channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" ))
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log()
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                                .then(index.get() <= messageStuff.size() - 1 ? channel.createMessage(messageStuff.get(index.getAndIncrement()).replace("\n\n\n", "\n\n" )).delaySubscription(Duration.ofSeconds(1)) : Mono.empty())
+                                //Hackfurther
+                                .then(index.getAndSet(0) <= messageStuff.size() - 100 ? channel.createMessage(messageStuff.get(index.get())).delaySubscription(Duration.ofSeconds(1)) : Mono.empty()).log();
+
+                    });
+                }
+
+
+                }
                 return Mono.empty();
             }).then();
             return printOnLogin.and(handlePingCommand);

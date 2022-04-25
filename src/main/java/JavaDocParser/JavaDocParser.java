@@ -117,6 +117,88 @@ public class JavaDocParser {
         return outList;
     }
 
+    public static ArrayList<String> getSpecificJavaDocPost(String p_filename){
+        String fileName = "";
+        for(int i : javadocRandomizerMap.keySet()){
+            if(javadocRandomizerMap.get(i).endsWith("\\"+ p_filename + ".html")){
+                fileName = javadocRandomizerMap.get(i);
+            }
+        }
+
+
+
+        System.out.println("FILENAME: " + fileName);
+        ArrayList<String> lines = null;
+        File f = new File(fileName);
+        try {
+            lines = (ArrayList<String>) Files.readAllLines(f.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        boolean startRecording = false;
+        ArrayList<String> linesWeCareAbout = new ArrayList<>();
+        //  linesWeCareAbout.add("https://docs.oracle.com/javase/8/" + fileName.replace("DOCS\\JDK8\\", "").replace("\\", "/"));
+
+        System.out.println("####" + fileName.replace("DOCS\\JDK8\\", ""));
+
+        for(String s : lines) {
+            if(s.equals("<!-- ======== START OF CLASS DATA ======== -->")){
+                startRecording = true;
+                continue;
+            }
+            if (s.contains("=\"summary\"")){
+                System.out.println("wrwrqereqetqt");
+                break;
+            };
+            if(startRecording){
+                linesWeCareAbout.add(s.replaceAll("<[^>]*>", "").replaceAll("&.*;", "") + "\n");
+            }
+        }
+
+        //    linesWeCareAbout.add("```");
+        StringBuilder sbOutString = new StringBuilder().append("https://docs.oracle.com/javase/8/" + fileName.replace("DOCS\\JDK8\\", "").replace("\\", "/")).append("\n```");
+        for(String s: linesWeCareAbout){
+            sbOutString.append(s).append("\n");
+        }
+        //     linesWeCareAbout.add("```");
+        String totalString = sbOutString.append("```").toString().replace("\n\n\n", "\n\n");
+
+        ArrayList<String> outList = new ArrayList<>();
+        ArrayList<String> parallelList = new ArrayList<>();
+        StringBuilder sbLocal = new StringBuilder().append("https://docs.oracle.com/javase/8/" + fileName.replace("DOCS\\JDK8\\", "").replace("\\", "/")).append("\n```");
+        if (totalString.length() < 2000) {
+            outList.add(totalString);
+            return outList;
+        }
+        else {
+            int localSum = sbLocal.length();
+
+
+
+            parallelList.addAll(linesWeCareAbout);
+
+            for(String s : linesWeCareAbout){
+                localSum += s.length();
+                if (localSum < 1992) {
+                    sbLocal.append(s);
+
+                }
+                else {
+                    localSum = 0;
+                    outList.add(sbLocal.append("```").toString());
+                    sbLocal = new StringBuilder().append("```");
+                    ;
+                }
+                parallelList.remove(s);
+            }
+        }
+
+        if (!sbLocal.toString().equals( ""))
+            outList.add(sbLocal.append("```").toString().replace("```\n```", "\n```"));
+        return outList;
+    }
+
     public static void main(String[] args){
         System.out.println(getJavaDocOfTheDayPost());
     }
